@@ -62,14 +62,18 @@ if option == "Upload PDF":
             tmp_path = tmp.name
         text = extract_text_from_pdf(tmp_path)
         os.unlink(tmp_path)
-        st.success("PDF uploaded and text extracted ✅")
+        if text.strip():
+            st.success("PDF uploaded and text extracted ✅")
+        else:
+            st.error("⚠️ The uploaded PDF appears to be empty or contains no readable text. Please upload a valid PDF.")
 else:
     text = st.text_area("Paste your lecture notes here:", height=300)
 
-if st.button("🔍 Analyze Notes") and text:
-    with st.spinner("Analyzing your notes..."):
-        result = analyze_lecture_notes(text)
-    st.markdown("---")
-    st.markdown(result)
-elif st.button and not text:
-    st.warning("Please upload a PDF or paste some text first.")
+if st.button("🔍 Analyze Notes"):
+    if not text.strip():
+        st.warning("⚠️ Please upload a valid PDF or paste some text before analyzing.")
+    else:
+        with st.spinner("Analyzing your notes..."):
+            result = analyze_lecture_notes(text)
+        st.markdown("---")
+        st.markdown(result)
