@@ -15,16 +15,30 @@ def extract_text_from_pdf(pdf_file):
 
 def analyze_lecture_notes(text):
     prompt = f"""
-You are an expert academic assistant. Analyze the following lecture notes and provide:
+You are an expert academic assistant and subject matter expert. First, identify the subject domain of the provided lecture notes (e.g., Mathematics, Physics, Chemistry, Computer Science, Biology, History, Economics, Engineering, etc.).
 
-1. SUMMARY — A clean, concise summary in 5-8 sentences
-2. KEY POINTS — 8 to 10 bullet points of the most important concepts
-3. POSSIBLE EXAM QUESTIONS — 5 likely exam questions based on the content
+Then based on the identified subject, analyze the notes and provide:
+
+1. SUBJECT DETECTED — State the subject/topic identified.
+
+2. SUMMARY — A clear, concise summary in 5-8 sentences capturing the core concepts.
+
+3. KEY POINTS — 10 bullet points of the most critical concepts, formulas, theorems, or facts a student must know.
+
+4. POSSIBLE EXAM QUESTIONS — Generate 6 exam questions strictly following these rules:
+   - MATHEMATICS: Generate ONLY numerical problems with specific given values that require calculation and working. No theory questions.
+   - PHYSICS / CHEMISTRY / ENGINEERING: Mix of BOTH numerical problems (with specific given values requiring calculation) AND theoretical questions (concept explanation, derive, state and prove). Ratio: 60% numerical, 40% theory.
+   - COMPUTER SCIENCE / PROGRAMMING: Mix of code-writing questions, algorithm problems, and short conceptual questions. Include at least 2 questions that require writing actual code or pseudocode.
+   - BIOLOGY / MEDICINE: Mix of diagram-based questions, process explanation questions, and application-based clinical/real-world questions.
+   - HISTORY / ECONOMICS / SOCIAL SCIENCE: Mix of analytical essay questions, cause-effect questions, and data/case-based interpretation questions.
+   - MIXED CONTENT: Proportionally mix numerical and theoretical questions based on content ratio.
+
+5. QUICK REVISION TIPS — 3 specific memory tricks, mnemonics, or study strategies tailored to this subject content.
 
 Lecture Notes:
 {text}
 
-Format your response clearly with the three sections labeled.
+Format each section clearly with its heading. Be specific, precise, and academically rigorous.
 """
     response = client.models.generate_content(
         model="gemini-2.5-flash",
