@@ -39,6 +39,7 @@ Lecture Notes:
 {text}
 
 Format each section clearly with its heading. Be specific, precise, and academically rigorous.
+IMPORTANT: Detect the language of the lecture notes and respond entirely in that same language.
 """
     response = client.models.generate_content(
         model="gemini-2.5-flash",
